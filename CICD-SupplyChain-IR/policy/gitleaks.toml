@@ -1,0 +1,6 @@
+title = "Minimal gitleaks config"
+[[rules]]
+id = "generic-api-key"
+description = "Generic API Key"
+regex = '''(?i)(api|token|key)[=:]\s*['\"]?[a-z0-9-_]{20,}['\"]?'''
+keywords = ["api","token","key"]

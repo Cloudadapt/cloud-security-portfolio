@@ -1,0 +1,77 @@
+name: ci-cd-secure-pipeline
+on:
+  push: { branches: [ "main" ] }
+  pull_request: { branches: [ "main" ] }
+  workflow_dispatch:
+permissions:
+  contents: read
+  security-events: write
+  id-token: write
+  actions: read
+jobs:
+  build_test_scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - name: Install app deps
+        working-directory: app/sample-service
+        run: pip install -r requirements.txt
+      - name: Run dummy tests
+        run: bash app/sample-service/tests_dummy.sh
+      - name: Secrets scan (gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        with: { args: "--no-git -v" }
+      - name: Dependency audit (pip-audit)
+        run: |
+          pip install pip-audit
+          pip-audit -r app/sample-service/requirements.txt -f json -o artifacts/pip_audit.json || true
+      - name: Build Docker image
+        run: docker build -t sample:ci app/sample-service
+      - name: Trivy vulnerability scan (container)
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          image-ref: "sample:ci"
+          format: "table"
+          exit-code: "0"
+          output: "artifacts/trivy_container.txt"
+      - name: Generate SBOM (Syft)
+        uses: anchore/sbom-action@v0
+        with:
+          image: "sample:ci"
+          output-file: "artifacts/sbom.spdx.json"
+      - name: IaC scan (tfsec)
+        uses: aquasecurity/tfsec-action@v1.0.7
+        with:
+          working_directory: ./
+          additional_args: "--soft-fail --config-file policy/tfsec.yml"
+        continue-on-error: true
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with: { name: security-reports, path: artifacts/ }
+  deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: build_test_scan
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Login to ECR
+        id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+      - name: Build, tag, and push image
+        env:
+          ECR_REGISTRY: ${{ steps.ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG app/sample-service
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      - name: (Placeholder) Deploy
+        run: echo "Update service to new image tag."

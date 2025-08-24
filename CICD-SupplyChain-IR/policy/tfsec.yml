@@ -1,0 +1,4 @@
+severity_overrides: { AWS012: HIGH }
+excludes:
+  - { rule_id: AWS002, reason: "False positive in tutorial code; addressed in real env" }
+  - { rule_id: AWS077, reason: "Public ALB required; mitigated by WAF + SGs" }
