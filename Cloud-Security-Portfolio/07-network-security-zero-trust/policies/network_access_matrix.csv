@@ -1,3 +1,0 @@
-Source,Destination,Port/Proto,Reason,Owner,Approved (Y/N),Expiration
-App Subnet,DB Subnet,5432/TCP,App to DB,Platform,Y,
-Admin VPN,Bastion,22/TCP,Admin access,Security,Y,

@@ -1,3 +1,0 @@
-Key Alias,Owner,System,Next Rotation Date,Rotation Method,Rollback Plan,Notes
-cmk/app/db,Security KMS Admin,Orders DB,,Auto-rotate,Restore previous version,
-cmk/app/web,App Owner,Web Tier,,Manual,Re-encrypt secrets,

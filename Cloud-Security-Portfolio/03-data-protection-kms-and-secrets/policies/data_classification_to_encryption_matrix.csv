@@ -1,4 +1,0 @@
-Data Class,Storage Type,Encryption Required (At Rest),Key Type (CMK/MK),Key Owner,Rotation (days),In-Transit (TLS),Notes
-Restricted,DB,Yes,CMK,Security KMS Admin,365,TLS1.2+,HSM-backed keys
-Confidential,Object Storage,Yes,CMK,App Owner,365,TLS1.2+,Bucket policy required
-Internal,Logs,Yes,MK,Platform,N/A,TLS1.2+,Aggregation account only
