@@ -1,0 +1,3 @@
+Scope,Policy/Initiative,Effect,Owner,Exemptions,Notes
+Subscription A,Secure Baseline,Audit/Enforce,Security,None,
+RG Web,Allowed Locations,Deny,Cloud Ops,Temp exception,

@@ -1,0 +1,4 @@
+Role Name,Human/Machine,Purpose,Owner,Env,Scope,Last Reviewed,MFA Required,Max Session (mins),Notes
+Cloud-ReadOnly,Human,Read-only investigations,Security,Prod,Account,,Yes,60,
+Deploy-Service,Machine,CI/CD deployments,Platform,Prod,Namespace,,N/A,15,OIDC/short-lived
+DB-Admin,Human,Emergency DBA,DBA,Prod,DB Cluster,,Yes,15,Break-glass only

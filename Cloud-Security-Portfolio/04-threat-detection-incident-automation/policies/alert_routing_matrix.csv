@@ -1,0 +1,4 @@
+Detection,Severity,Owner,Runbook,Auto-Action,Approval Needed (Y/N),Notes
+Public S3 bucket,High,Cloud Sec,IR-Containment.md,Block public ACL,Y,Notify data owner
+Anomalous console login,Med,SecOps,IR-Identity.md,Disable key,Y,Create case
+Malicious egress domain,High,NetSec,IR-Network.md,Quarantine instance,Y,
