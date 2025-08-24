@@ -1,0 +1,10 @@
+{
+  "Findings": [{
+    "SchemaVersion": "2.0",
+    "Id": "sample-1",
+    "Title": "UnauthorizedAccess:EC2/SSHBruteForce",
+    "Type": "UnauthorizedAccess:EC2/SSHBruteForce",
+    "Severity": 5.3,
+    "Resource": { "ResourceType": "Instance", "InstanceDetails": { "InstanceId": "i-0123456789abcdef0" } }
+  }]
+}

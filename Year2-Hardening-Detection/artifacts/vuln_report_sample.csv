@@ -1,0 +1,4 @@
+Repo,Severity,ID/CVE,Component,Opened,DueDate,Closed,Notes
+orders-api,Critical,CVE-2023-XYZZY,openssl,2025-07-01,2025-07-08,Yes,Patched in 1.2.3
+web-frontend,High,CVE-2025-ABCD,react,2025-07-10,2025-07-24,No,Pending release
+platform,Medium,CVE-2024-FOO,libxml,2025-07-05,2025-08-05,No,Testing patch
